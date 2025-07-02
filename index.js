@@ -12,20 +12,17 @@ if (!serviceAccountJSON) {
 
 const serviceAccount = JSON.parse(serviceAccountJSON);
 
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+// ✅ Only initialize if no app already exists
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
+
+const db = admin.firestore();
 
 const app = express();
 const port = 3000;
-
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
 
 app.use(cors());
 app.use(express.json()); // Allow parsing JSON in POST requests
