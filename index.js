@@ -1,7 +1,21 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const cors = require('cors');
-const serviceAccount = require('./serviceAccountKey.json');
+
+// Load Firebase credentials from environment variable
+const serviceAccountJSON = process.env.SERVICE_ACCOUNT_JSON;
+
+if (!serviceAccountJSON) {
+  console.error("SERVICE_ACCOUNT_JSON is not set!");
+  process.exit(1);
+}
+
+const serviceAccount = JSON.parse(serviceAccountJSON);
+
+// Initialize Firebase Admin SDK
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 const app = express();
 const port = 3000;
